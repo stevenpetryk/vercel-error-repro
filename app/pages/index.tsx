@@ -1,8 +1,9 @@
-import { Link, BlitzPage, useMutation } from "blitz"
+import { Link, BlitzPage, useMutation, GetServerSideProps, invokeWithMiddleware } from "blitz"
 import Layout from "app/layouts/Layout"
 import logout from "app/auth/mutations/logout"
 import { useCurrentUser } from "app/hooks/useCurrentUser"
 import { Suspense } from "react"
+import testMutation from "app/mutations/testMutation"
 
 /*
  * This file is just for a pleasant getting started page for your new app.
@@ -268,5 +269,10 @@ const Home: BlitzPage = () => {
 }
 
 Home.getLayout = (page) => <Layout title="Home">{page}</Layout>
+
+export const getServerSideProps: GetServerSideProps<{}, {}> = async function ({ req, res }) {
+  await invokeWithMiddleware(testMutation, {}, { req, res })
+  return { props: {} }
+}
 
 export default Home
